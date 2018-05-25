@@ -234,3 +234,5 @@ D:\Proyectos\Foods\FoodsAPI\Foods\obj\Debug\Foods.csproj.CoreCompileInputs.cache
 D:\Proyectos\Foods\FoodsAPI\Foods\obj\Debug\Foods.csproj.CopyComplete
 D:\Proyectos\Foods\FoodsAPI\Foods\obj\Debug\Foods.dll
 D:\Proyectos\Foods\FoodsAPI\Foods\obj\Debug\Foods.pdb
+D:\Proyectos\Foods\FoodsAPI\Foods\bin\MegaApiClient.dll
+D:\Proyectos\Foods\FoodsAPI\Foods\bin\MegaApiClient.xml
