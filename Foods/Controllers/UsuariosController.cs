@@ -55,7 +55,7 @@ namespace Foods.Controllers
                     mail.From = new MailAddress(datos.GetValue("Email").ToString());
 
                     mail.To.Add(datos.GetValue("Email").ToString());
-                    mail.Subject = "Dieta";
+                    mail.Subject = "Verificación de correo";
                     mail.SubjectEncoding = Encoding.UTF8;
                     mail.Body = "<div style='width:100%!important;color:#222222;font-family:sans-serif;font-weight:normal;text-align:center;line-height:19px;font-size:14px;background:#f2f2f2;margin:0;padding:0;height:100%;width:100%;' bgcolor='#f2f2f2'><img src='http://www.mdpi.com/img/journals/foods-logo-print.png' title='Foods' style='width:120px;outline:0;text-decoration:none;max-width:100%;clear:both;display:block;margin-right:auto;margin-left:auto;padding-top:3%;' align='center'><div style='box-sizing:border-box;border-spacing:0;border-collapse:collapse;vertical-align:top;width:630px;display:block!important;background:#ffffff;padding:15px;border:1px solid #ddd;margin-right:auto;margin-left:auto;margin-top:1%;margin-bottom:5%;' align='center' bgcolor='#ffffff'>¡Te damos la bienvenida a Foods!<br><br>Necesitamos que verifiques tu cuenta para que puedas crear y compartir tus recetas y muchas cosas más.<br><br><div style='display:inline-block'><a href='" + urlverification + "' style='background:#0275d8;color:#fff;border:1px solid #055295;padding:10px 15px 8px 15px;border-radius:3px;font-size:12px;font-weight:300;font-family:Helvetica,Arial,sans-serif;letter-spacing:1px;text-decoration:none!important' target='_blank' data-saferedirecturl='https://www.google.com/url?hl=es&amp;q=" + urlverification + "'>Verificar correo electrónico</a></div><br><br><br><small>Si no te has registrado recientemente a esta página, es posible que otra persona se haya registrado con tu información por error.</small></div></div>";
                     mail.BodyEncoding = Encoding.UTF8;
@@ -206,6 +206,71 @@ namespace Foods.Controllers
             response.Close();
 
             return true;
+        }
+
+        [HttpPost]
+        public Usuario Login(string user, string pass)
+        {
+            var hash = System.Web.Helpers.Crypto.Hash(pass);
+
+            var usuario = db.Usuario.Where(r => r.Email.Equals(user)).ToList();
+
+            if (usuario.Count > 0)
+            {
+                if (usuario.First().Contrasena.Equals(hash))
+                {
+                    return usuario.First();
+                }
+                else
+                {
+                    return new Usuario();
+                }
+            }
+            else
+            {
+                return new Usuario();
+            }
+
+        }
+
+        [HttpPost]
+        public bool Contacto(string email, string mensaje)
+        {
+
+            bool q = false;
+
+            MailMessage mail = new MailMessage();
+
+            mail.From = new MailAddress(email);
+
+            mail.To.Add(email);
+            mail.Subject = "Contacto";
+            mail.SubjectEncoding = Encoding.UTF8;
+            mail.Body = "<h4>" + mensaje + "</h4>";
+            mail.BodyEncoding = Encoding.UTF8;
+            mail.IsBodyHtml = true;
+
+            SmtpClient smtp = new SmtpClient();
+
+            smtp.Host = "smtp.gmail.com";
+            smtp.Port = 25;
+            smtp.Credentials = new NetworkCredential("phpmailerjalorrados@gmail.com", "jalorrados1937");
+            smtp.EnableSsl = true;
+            try
+            {
+                smtp.Send(mail);
+                q = true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                smtp.Dispose();
+            }
+
+            return q;
         }
     }
 }
