@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="FoodsModelStoreContainer" CdmEntityContainer="FoodsEntities">
+    <EntitySetMapping Name="Especificacion_Ingrediente">
+      <EntityTypeMapping TypeName="FoodsModel.Especificacion_Ingrediente">
+        <MappingFragment StoreEntitySet="Especificacion_Ingrediente">
+          <ScalarProperty Name="Id_Especificacion_Ingrediente" ColumnName="Id_Especificacion_Ingrediente" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="Ingrediente" ColumnName="Ingrediente" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Ingrediente">
+      <EntityTypeMapping TypeName="FoodsModel.Ingrediente">
+        <MappingFragment StoreEntitySet="Ingrediente">
+          <ScalarProperty Name="Id_Ingrediente" ColumnName="Id_Ingrediente" />
+          <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+          <ScalarProperty Name="Unidades" ColumnName="Unidades" />
+          <ScalarProperty Name="Receta" ColumnName="Receta" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Receta">
+      <EntityTypeMapping TypeName="FoodsModel.Receta">
+        <MappingFragment StoreEntitySet="Receta">
+          <ScalarProperty Name="Id_Receta" ColumnName="Id_Receta" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="Preparacion" ColumnName="Preparacion" />
+          <ScalarProperty Name="N_Personas" ColumnName="N_Personas" />
+          <ScalarProperty Name="Categoria" ColumnName="Categoria" />
+          <ScalarProperty Name="Dificultad" ColumnName="Dificultad" />
+          <ScalarProperty Name="Imagen" ColumnName="Imagen" />
+          <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Usuario">
+      <EntityTypeMapping TypeName="FoodsModel.Usuario">
+        <MappingFragment StoreEntitySet="Usuario">
+          <ScalarProperty Name="Id_Usuario" ColumnName="Id_Usuario" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Nombre_y_Apellidos" ColumnName="Nombre_y_Apellidos" />
+          <ScalarProperty Name="Foto" ColumnName="Foto" />
+          <ScalarProperty Name="Contrasena" ColumnName="Contrasena" />
+          <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+          <ScalarProperty Name="Rol" ColumnName="Rol" />
+          <ScalarProperty Name="Estado" ColumnName="Estado" />
+          <ScalarProperty Name="Token" ColumnName="Token" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Valoracion">
+      <EntityTypeMapping TypeName="FoodsModel.Valoracion">
+        <MappingFragment StoreEntitySet="Valoracion">
+          <ScalarProperty Name="Id_Valoracion" ColumnName="Id_Valoracion" />
+          <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+          <ScalarProperty Name="Puntuacion" ColumnName="Puntuacion" />
+          <ScalarProperty Name="Receta" ColumnName="Receta" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

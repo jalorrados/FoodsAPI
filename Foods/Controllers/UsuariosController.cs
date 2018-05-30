@@ -45,7 +45,9 @@ namespace Foods.Controllers
                 {
                     db.SaveChanges();
 
-                    var urlverification = "http://localhost:50999/api/Usuarios/ValidarUsuario?t=" + token;
+                    // var urlverification = "http:// localhost:50999/api/Usuarios/ValidarUsuario?t=" + token;
+
+                    var urlverification = "http://foodsinallapi.gearhostpreview.com/api/Usuarios/ValidarUsuario?t=" + token;
 
                     MailMessage mail = new MailMessage();
 

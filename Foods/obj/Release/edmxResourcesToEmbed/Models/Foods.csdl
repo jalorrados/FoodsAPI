@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="FoodsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Especificacion_Ingrediente">
+    <Key>
+      <PropertyRef Name="Id_Especificacion_Ingrediente" />
+    </Key>
+    <Property Name="Id_Especificacion_Ingrediente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nombre" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Ingrediente" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Ingrediente1" Relationship="Self.FK_Especificacion_Ingrediente_Ingrediente" FromRole="Especificacion_Ingrediente" ToRole="Ingrediente" />
+  </EntityType>
+  <EntityType Name="Ingrediente">
+    <Key>
+      <PropertyRef Name="Id_Ingrediente" />
+    </Key>
+    <Property Name="Id_Ingrediente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Cantidad" Type="Double" Nullable="false" />
+    <Property Name="Unidades" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Receta" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Especificacion_Ingrediente" Relationship="Self.FK_Especificacion_Ingrediente_Ingrediente" FromRole="Ingrediente" ToRole="Especificacion_Ingrediente" />
+    <NavigationProperty Name="Receta1" Relationship="Self.FK_Ingrediente_Receta" FromRole="Ingrediente" ToRole="Receta" />
+  </EntityType>
+  <EntityType Name="Receta">
+    <Key>
+      <PropertyRef Name="Id_Receta" />
+    </Key>
+    <Property Name="Id_Receta" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nombre" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Preparacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="N_Personas" Type="Int32" Nullable="false" />
+    <Property Name="Categoria" Type="Int32" Nullable="false" />
+    <Property Name="Dificultad" Type="Int32" Nullable="false" />
+    <Property Name="Imagen" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Usuario" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Ingrediente" Relationship="Self.FK_Ingrediente_Receta" FromRole="Receta" ToRole="Ingrediente" />
+    <NavigationProperty Name="Usuario1" Relationship="Self.FK_Receta_Usuario" FromRole="Receta" ToRole="Usuario" />
+    <NavigationProperty Name="Valoracion" Relationship="Self.FK_Valoracion_Receta" FromRole="Receta" ToRole="Valoracion" />
+  </EntityType>
+  <EntityType Name="Usuario">
+    <Key>
+      <PropertyRef Name="Id_Usuario" />
+    </Key>
+    <Property Name="Id_Usuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Nombre_y_Apellidos" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Foto" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <Property Name="Contrasena" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Telefono" Type="Int32" />
+    <Property Name="Rol" Type="Int32" Nullable="false" />
+    <Property Name="Estado" Type="Int32" Nullable="false" />
+    <Property Name="Token" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Receta" Relationship="Self.FK_Receta_Usuario" FromRole="Usuario" ToRole="Receta" />
+  </EntityType>
+  <EntityType Name="Valoracion">
+    <Key>
+      <PropertyRef Name="Id_Valoracion" />
+    </Key>
+    <Property Name="Id_Valoracion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Puntuacion" Type="Double" />
+    <Property Name="Receta" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Receta1" Relationship="Self.FK_Valoracion_Receta" FromRole="Valoracion" ToRole="Receta" />
+  </EntityType>
+  <Association Name="FK_Especificacion_Ingrediente_Ingrediente">
+    <End Role="Ingrediente" Type="Self.Ingrediente" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Especificacion_Ingrediente" Type="Self.Especificacion_Ingrediente" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ingrediente">
+        <PropertyRef Name="Id_Ingrediente" />
+      </Principal>
+      <Dependent Role="Especificacion_Ingrediente">
+        <PropertyRef Name="Ingrediente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Ingrediente_Receta">
+    <End Role="Receta" Type="Self.Receta" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Ingrediente" Type="Self.Ingrediente" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Receta">
+        <PropertyRef Name="Id_Receta" />
+      </Principal>
+      <Dependent Role="Ingrediente">
+        <PropertyRef Name="Receta" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Receta_Usuario">
+    <End Role="Usuario" Type="Self.Usuario" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Receta" Type="Self.Receta" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Usuario">
+        <PropertyRef Name="Id_Usuario" />
+      </Principal>
+      <Dependent Role="Receta">
+        <PropertyRef Name="Usuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Valoracion_Receta">
+    <End Role="Receta" Type="Self.Receta" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Valoracion" Type="Self.Valoracion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Receta">
+        <PropertyRef Name="Id_Receta" />
+      </Principal>
+      <Dependent Role="Valoracion">
+        <PropertyRef Name="Receta" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="FoodsEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Especificacion_Ingrediente" EntityType="Self.Especificacion_Ingrediente" />
+    <EntitySet Name="Ingrediente" EntityType="Self.Ingrediente" />
+    <EntitySet Name="Receta" EntityType="Self.Receta" />
+    <EntitySet Name="Usuario" EntityType="Self.Usuario" />
+    <EntitySet Name="Valoracion" EntityType="Self.Valoracion" />
+    <AssociationSet Name="FK_Especificacion_Ingrediente_Ingrediente" Association="Self.FK_Especificacion_Ingrediente_Ingrediente">
+      <End Role="Ingrediente" EntitySet="Ingrediente" />
+      <End Role="Especificacion_Ingrediente" EntitySet="Especificacion_Ingrediente" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Ingrediente_Receta" Association="Self.FK_Ingrediente_Receta">
+      <End Role="Receta" EntitySet="Receta" />
+      <End Role="Ingrediente" EntitySet="Ingrediente" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Receta_Usuario" Association="Self.FK_Receta_Usuario">
+      <End Role="Usuario" EntitySet="Usuario" />
+      <End Role="Receta" EntitySet="Receta" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Valoracion_Receta" Association="Self.FK_Valoracion_Receta">
+      <End Role="Receta" EntitySet="Receta" />
+      <End Role="Valoracion" EntitySet="Valoracion" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="FoodsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Especificacion_Ingrediente">
+    <Key>
+      <PropertyRef Name="Id_Especificacion_Ingrediente" />
+    </Key>
+    <Property Name="Id_Especificacion_Ingrediente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombre" Type="nvarchar(max)" />
+    <Property Name="Ingrediente" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Ingrediente">
+    <Key>
+      <PropertyRef Name="Id_Ingrediente" />
+    </Key>
+    <Property Name="Id_Ingrediente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Cantidad" Type="float" Nullable="false" />
+    <Property Name="Unidades" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Receta" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Receta">
+    <Key>
+      <PropertyRef Name="Id_Receta" />
+    </Key>
+    <Property Name="Id_Receta" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombre" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Preparacion" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="N_Personas" Type="int" Nullable="false" />
+    <Property Name="Categoria" Type="int" Nullable="false" />
+    <Property Name="Dificultad" Type="int" Nullable="false" />
+    <Property Name="Imagen" Type="nvarchar(max)" />
+    <Property Name="Usuario" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Usuario">
+    <Key>
+      <PropertyRef Name="Id_Usuario" />
+    </Key>
+    <Property Name="Id_Usuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Nombre_y_Apellidos" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Foto" Type="varbinary(max)" />
+    <Property Name="Contrasena" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Telefono" Type="int" />
+    <Property Name="Rol" Type="int" Nullable="false" />
+    <Property Name="Estado" Type="int" Nullable="false" />
+    <Property Name="Token" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Valoracion">
+    <Key>
+      <PropertyRef Name="Id_Valoracion" />
+    </Key>
+    <Property Name="Id_Valoracion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Descripcion" Type="nvarchar(max)" />
+    <Property Name="Puntuacion" Type="float" />
+    <Property Name="Receta" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Especificacion_Ingrediente_Ingrediente">
+    <End Role="Ingrediente" Type="Self.Ingrediente" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Especificacion_Ingrediente" Type="Self.Especificacion_Ingrediente" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ingrediente">
+        <PropertyRef Name="Id_Ingrediente" />
+      </Principal>
+      <Dependent Role="Especificacion_Ingrediente">
+        <PropertyRef Name="Ingrediente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Ingrediente_Receta">
+    <End Role="Receta" Type="Self.Receta" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Ingrediente" Type="Self.Ingrediente" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Receta">
+        <PropertyRef Name="Id_Receta" />
+      </Principal>
+      <Dependent Role="Ingrediente">
+        <PropertyRef Name="Receta" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Receta_Usuario">
+    <End Role="Usuario" Type="Self.Usuario" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Receta" Type="Self.Receta" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Usuario">
+        <PropertyRef Name="Id_Usuario" />
+      </Principal>
+      <Dependent Role="Receta">
+        <PropertyRef Name="Usuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Valoracion_Receta">
+    <End Role="Receta" Type="Self.Receta" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Valoracion" Type="Self.Valoracion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Receta">
+        <PropertyRef Name="Id_Receta" />
+      </Principal>
+      <Dependent Role="Valoracion">
+        <PropertyRef Name="Receta" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="FoodsModelStoreContainer">
+    <EntitySet Name="Especificacion_Ingrediente" EntityType="Self.Especificacion_Ingrediente" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Ingrediente" EntityType="Self.Ingrediente" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Receta" EntityType="Self.Receta" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Valoracion" EntityType="Self.Valoracion" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Especificacion_Ingrediente_Ingrediente" Association="Self.FK_Especificacion_Ingrediente_Ingrediente">
+      <End Role="Ingrediente" EntitySet="Ingrediente" />
+      <End Role="Especificacion_Ingrediente" EntitySet="Especificacion_Ingrediente" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Ingrediente_Receta" Association="Self.FK_Ingrediente_Receta">
+      <End Role="Receta" EntitySet="Receta" />
+      <End Role="Ingrediente" EntitySet="Ingrediente" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Receta_Usuario" Association="Self.FK_Receta_Usuario">
+      <End Role="Usuario" EntitySet="Usuario" />
+      <End Role="Receta" EntitySet="Receta" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Valoracion_Receta" Association="Self.FK_Valoracion_Receta">
+      <End Role="Receta" EntitySet="Receta" />
+      <End Role="Valoracion" EntitySet="Valoracion" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
