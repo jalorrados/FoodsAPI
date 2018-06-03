@@ -163,8 +163,7 @@ namespace Foods.Controllers
 
             return Ok(usuario);
         }
-
-        [HttpGet]
+        
         private bool UsuarioExiste(string email)
         {
             return db.Usuario.Count(e => e.Email.Equals(email)) < 1;
@@ -271,6 +270,56 @@ namespace Foods.Controllers
             }
 
             return q;
+        }
+
+        [HttpGet]
+        public int GetUsuario(string email)
+        {
+
+            var usuario = db.Usuario.Where(r => r.Email.Equals(email)).ToList();
+            var IdUsuario = -1;
+
+
+            if (usuario.Count > 0)
+            {
+                IdUsuario = usuario.First().Id_Usuario;
+            }
+
+            return IdUsuario;
+        }
+
+        [HttpPost]
+        public bool ChangePermissions(string email, int rol)
+        {
+
+            bool q = false;
+
+            var usuarios = db.Usuario.Where(r => r.Email.Equals(email)).ToList();
+
+            if (usuarios.Count > 0)
+            {
+                var usuario = usuarios.First();
+
+                usuario.Rol = rol;
+
+                db.Entry(usuario).State = EntityState.Modified;
+
+                try
+                {
+
+                    db.SaveChanges();
+
+                    q = true;
+
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+
+            return q;
+
         }
     }
 }

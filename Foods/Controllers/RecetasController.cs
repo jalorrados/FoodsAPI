@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Foods.Models;
+using Newtonsoft.Json.Linq;
 
 namespace Foods.Controllers
 {
@@ -16,103 +17,117 @@ namespace Foods.Controllers
     {
         private FoodsEntities db = new FoodsEntities();
 
-        // GET: api/Recetas
-        public IQueryable<Receta> GetReceta()
+        [HttpGet]
+        public bool CrearReceta(JObject datos)
         {
-            return db.Receta;
+
+            bool q = false;
+
+            int idReceta = AddRecipe(JObject.Parse(datos.GetValue("Receta").ToString()));
+
+            if (idReceta != -1)
+            {
+                if (AddIngredient(JObject.Parse(datos.GetValue("Ingrediente").ToString()), idReceta))
+                {
+                    q = true;
+                }
+            }
+
+            return q;
         }
 
-        // GET: api/Recetas/5
-        [ResponseType(typeof(Receta))]
-        public IHttpActionResult GetReceta(int id)
+        private int AddRecipe(JObject datos)
         {
-            Receta receta = db.Receta.Find(id);
-            if (receta == null)
-            {
-                return NotFound();
-            }
 
-            return Ok(receta);
-        }
+            int idReceta = -1;
 
-        // PUT: api/Recetas/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutReceta(int id, Receta receta)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            Receta receta = new Receta();
 
-            if (id != receta.Id_Receta)
-            {
-                return BadRequest();
-            }
+            receta.Nombre = datos.GetValue("Nombre").ToString();
+            receta.Preparacion = datos.GetValue("Preparacion").ToString();
+            receta.N_Personas = (int)datos.GetValue("N_Personas");
+            receta.Categoria = (int)datos.GetValue("Categoria");
+            receta.Dificultad = (int)datos.GetValue("Dificultad");
+            receta.Imagen = datos.GetValue("Imagen").ToString();
+            receta.Usuario = (int)datos.GetValue("Id_Usuario");
 
-            db.Entry(receta).State = EntityState.Modified;
+            db.Receta.Add(receta);
 
             try
             {
                 db.SaveChanges();
+
+                idReceta = db.Receta.Where(r => r.Nombre.Equals(receta.Nombre) && r.Imagen.Equals(receta.Imagen)).ToList().Last().Id_Receta;
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception)
             {
-                if (!RecetaExists(id))
+            }
+
+            return idReceta;
+        }
+
+        private bool AddIngredient(JObject datos, int idReceta)
+        {
+
+            int idIngrediente = -1;
+
+            bool q = false;
+
+            for (var i = 0; i < 10; i++)
+            {
+
+                Ingrediente ingrediente = new Ingrediente();
+
+                ingrediente.Cantidad = (double)datos.GetValue("Cantidad");
+                ingrediente.Unidades = datos.GetValue("Unidades").ToString();
+                ingrediente.Receta = idReceta;
+
+                db.Ingrediente.Add(ingrediente);
+
+                try
                 {
-                    return NotFound();
+                    db.SaveChanges();
+
+                    idIngrediente = db.Ingrediente.Where(r => r.Cantidad == ingrediente.Cantidad && r.Unidades.Equals(ingrediente.Unidades)).ToList().Last().Id_Ingrediente;
+
+                    Especificacion_Ingrediente especificacion = new Especificacion_Ingrediente();
+
+                    especificacion.Nombre = datos.GetValue("Nombre").ToString();
+                    especificacion.Ingrediente = idIngrediente;
+
+                    db.Especificacion_Ingrediente.Add(especificacion);
+
+                    try
+                    {
+
+                        db.SaveChanges();
+
+                        q = true;
+                    }
+                    catch (Exception)
+                    {
+                    }
                 }
-                else
+                catch (Exception)
                 {
-                    throw;
                 }
+
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            return q;
         }
 
-        // POST: api/Recetas
-        [ResponseType(typeof(Receta))]
-        public IHttpActionResult PostReceta(Receta receta)
+        [HttpGet]
+        public int GetNumberRecipesByCategory(int categoria)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.Receta.Add(receta);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = receta.Id_Receta }, receta);
+            return db.Receta.Where(r => r.Categoria == categoria).ToList().Count;
         }
 
-        // DELETE: api/Recetas/5
-        [ResponseType(typeof(Receta))]
-        public IHttpActionResult DeleteReceta(int id)
+        [HttpGet]
+        public List<Receta> GetRecipesByCategory(int categoria)
         {
-            Receta receta = db.Receta.Find(id);
-            if (receta == null)
-            {
-                return NotFound();
-            }
-
-            db.Receta.Remove(receta);
-            db.SaveChanges();
-
-            return Ok(receta);
+            return db.Receta.Where(r => r.Categoria == categoria).ToList();
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool RecetaExists(int id)
-        {
-            return db.Receta.Count(e => e.Id_Receta == id) > 0;
-        }
     }
 }
